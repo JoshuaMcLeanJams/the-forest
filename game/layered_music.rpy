@@ -1,40 +1,70 @@
 init python:
-    channel_list = [
-        "lead",
-        "lead2",
-        "harmony",
-        "harmony2",
-        "accomp",
-        "accomp2",
-        "drums",
-        "drums2"
-    ]
-    audio_file = dict.fromkeys(channel_list, None)
+    class AudioLayer:
+        is_playing = False
+        layer_dict = {}
 
-    for channel in channel_list:
-        renpy.music.register_channel(channel, "music", True, True, True)
+        def __init__(self, file):
+            self.enabled = False
+            self.file = file
 
-label audio_set(channel, file):
-    $audio_file[channel] = file
-    return
+        @classmethod
+        def disable(cls, channel):
+            cls.layer_dict[channel].enabled = False
+            renpy.music.set_volume(0.0, 0, channel)
+            return
 
-label audio_stop_all():
-    for channel in channel_list:
-        renpy.music.stop(channel)
-    return
+        @classmethod
+        def disable_all(cls):
+            for channel in cls.layer_dict.keys():
+                cls.disable(channel)
 
-label audio_toggle(channel, file):
-    python:
-        if audio_file[channel] is None:
-           call audio_toggle(channel, file)
-        else:
-           audio_file[channel] = None
-    return
+        @classmethod
+        def enable(cls, channel):
+            cls.layer_dict[channel].enabled = True
+            renpy.music.set_volume(1.0, 0, channel)
+            return
 
-label audio_update:
-    python:
-        for channel in channel_list:
-            renpy.music.stop(channel)
-            if audio_file[channel] is not None:
-                renpy.play(audio_file[channel], channel)
-    return
+        @classmethod
+        def enable_all(cls):
+            for channel in cls.layer_dict.keys():
+                cls.enable(channel)
+
+        @classmethod
+        def toggle(cls, channel):
+            if cls.layer_dict[channel].enabled:
+                cls.disable(channel)
+            else:
+                cls.enable(channel)
+            return
+
+        @classmethod
+        def toggle_all(cls):
+            for channel in cls.layer_dict.keys():
+                cls.toggle(channel)
+
+        @classmethod
+        def set(cls, channel, file):
+            if cls.is_playing:
+                return
+            if channel not in cls.layer_dict.keys():
+                renpy.music.register_channel(channel, "music", True, True, True)
+            cls.layer_dict[channel] = AudioLayer(file)
+            return
+
+        @classmethod
+        def start(cls):
+            if cls.is_playing:
+                return
+            for channel in cls.layer_dict.keys():
+                if channel is not None:
+                    renpy.music.play(cls.layer_dict[channel].file, channel)
+                    cls.disable(channel)
+            cls.is_playing = True
+            return
+
+        @classmethod
+        def stop(cls):
+            if not cls.is_playing:
+                return
+            for channel in cls.layer_dict.keys():
+                renpy.music.stop(channel)

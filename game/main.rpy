@@ -9,10 +9,18 @@ define audio.pulse1 = "audio/running_genesis_pulse1.ogg"
 define audio.pulse2 = "audio/running_genesis_pulse2.ogg"
 define audio.wave = "audio/running_genesis_wave.ogg"
 
+init python:
+    AudioLayer.set('drum', audio.drum)
+    AudioLayer.set('bass', audio.bass)
+    AudioLayer.set('bass2', audio.bass2)
+    AudioLayer.set('pulse1', audio.pulse1)
+    AudioLayer.set('pulse2', audio.pulse2)
+    AudioLayer.set('wave', audio.wave)
+
 label start:
+    $AudioLayer.start()
     scene bg room
     nvl show
-    jump main
 
 label main:
     nvl clear
@@ -20,24 +28,29 @@ label main:
         "What shall we toggle?"
 
         "Bass":
-            call audio_toggle('accomp', audio.bass)
+            $AudioLayer.toggle('bass')
         "Bass 2":
-            call audio_toggle('accomp2', audio.bass2)
+            $AudioLayer.toggle('bass2')
         "Drum":
-            call audio_toggle('drums', audio.drum)
+            $AudioLayer.toggle('drum')
         "Pulse 1":
-            call audio_toggle('harmony', audio.pulse1)
+            $AudioLayer.toggle('pulse1')
         "Pulse 2":
-            call audio_toggle('harmony2', audio.pulse2)
+            $AudioLayer.toggle('pulse2')
         "Wave":
-            call audio_toggle('lead', audio.wave)
+            $AudioLayer.toggle('wave')
+        "Enable all":
+            $AudioLayer.enable_all()
+        "Disable all":
+            $AudioLayer.disable_all()
+        "Toggle all":
+            $AudioLayer.toggle_all()
         "I'm outta here":
             jump end
 
-    call audio_update()
     jump main
 
 label end:
     "The End"
-    call audio_stop_all()
+    $AudioLayer.stop()
     return
