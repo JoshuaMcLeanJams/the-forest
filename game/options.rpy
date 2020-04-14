@@ -12,7 +12,7 @@
 ##
 ## The _() surrounding the string marks it as eligible for translation.
 
-define config.name = _("easyjam")
+define config.name = _("default")
 
 
 ## Determines if the title given above is shown on the main menu screen. Set
@@ -37,7 +37,7 @@ define gui.about = _p("""
 ## distribution. This must be ASCII-only, and must not contain spaces, colons,
 ## or semicolons.
 
-define build.name = "easyjam"
+define build.name = "default"
 
 
 ## Sounds and music ############################################################
@@ -71,23 +71,25 @@ define config.has_voice = True
 ## transition should be used.
 
 ## Entering or exiting the game menu.
+
 define config.enter_transition = dissolve
 define config.exit_transition = dissolve
 
+
 ## Between screens of the game menu.
+
 define config.intra_transition = dissolve
 
+
 ## A transition that is used after a game has been loaded.
+
 define config.after_load_transition = None
 
+
 ## Used when entering the main menu after the game has ended.
+
 define config.end_game_transition = None
 
-define config.empty_window = nvl_show_core
-define config.window_hide_transition = None
-define config.window_show_transition = None
-define config.nvl_adv_transition = None
-define config.nvl_paged_rollback = True
 
 ## A variable to set the transition used when the game starts does not exist.
 ## Instead, use a with statement after showing the initial scene.
@@ -140,7 +142,7 @@ default preferences.afm_time = 15
 ## This generally should not be changed, and if it is, should always be a
 ## literal string, not an expression.
 
-define config.save_directory = "easyjam-1586558394"
+define config.save_directory = "default-1586898502"
 
 
 ## Icon ########################################################################
@@ -191,6 +193,11 @@ init python:
 
     build.documentation('*.html')
     build.documentation('*.txt')
+
+## Set this to a string containing your Apple Developer ID Application to enable
+## codesigning on the Mac. Be sure to change it to your own Apple-issued ID.
+
+# define build.mac_identity = "Developer ID Application: Guy Shy (XHTE5H7Z42)"
 
 
 ## A Google Play license key is required to download expansion files and perform

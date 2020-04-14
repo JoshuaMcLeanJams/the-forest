@@ -1,4 +1,4 @@
-﻿################################################################################
+################################################################################
 ## Initialization
 ################################################################################
 
@@ -323,15 +323,12 @@ screen navigation():
 
         textbutton _("About") action ShowMenu("about")
 
-        if renpy.variant("pc") or (renpy.variant("web") and not renpy.variant("mobile")):
+        if renpy.variant("pc"):
 
             ## Help isn't necessary or relevant to mobile devices.
             textbutton _("Help") action ShowMenu("help")
 
-        if renpy.variant("pc"):
-
-            ## The quit button is banned on iOS and unnecessary on Android and
-            ## Web.
+            ## The quit button is banned on iOS and unnecessary on Android.
             textbutton _("Quit") action Quit(confirm=not main_menu)
 
 
@@ -727,7 +724,7 @@ screen preferences():
             hbox:
                 box_wrap True
 
-                if renpy.variant("pc") or renpy.variant("web"):
+                if renpy.variant("pc"):
 
                     vbox:
                         style_prefix "radio"
@@ -1306,12 +1303,15 @@ screen nvl(dialogue, items=None):
 
         ## Displays dialogue in either a vpgrid or the vbox.
         if gui.nvl_height:
+
             vpgrid:
                 cols 1
                 yinitial 1.0
+
                 use nvl_dialogue(dialogue)
 
         else:
+
             use nvl_dialogue(dialogue)
 
         ## Displays the menu, if given. The menu may be displayed incorrectly if
@@ -1326,15 +1326,20 @@ screen nvl(dialogue, items=None):
 
 
 screen nvl_dialogue(dialogue):
+
     for d in dialogue:
+
         window:
             id d.window_id
 
             fixed:
                 yfit gui.nvl_height is None
+
                 if d.who is not None:
+
                     text d.who:
                         id d.who_id
+
                 text d.what:
                     id d.what_id
 
