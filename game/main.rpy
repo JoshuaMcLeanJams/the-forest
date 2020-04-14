@@ -1,6 +1,4 @@
-define e = Character("Eileen", kind=nvl, color="#C8FFC8")
-define narrator = nvl_narrator
-define menu = nvl_menu
+define e = Character("Eileen", color="#C8FFC8")
 
 define audio.bass = "audio/running_genesis_bass.ogg"
 define audio.bass2 = "audio/running_genesis_bass2.ogg"
@@ -8,6 +6,20 @@ define audio.drum = "audio/running_genesis_drum.ogg"
 define audio.pulse1 = "audio/running_genesis_pulse1.ogg"
 define audio.pulse2 = "audio/running_genesis_pulse2.ogg"
 define audio.wave = "audio/running_genesis_wave.ogg"
+
+image bg forest = "images/bg/fantasy-forest.png"
+image bg bedroom = "images/bg/arabian-bedroom.png"
+image bg subway = "images/bg/subway-morning.jpg"
+image bg lakeside = "images/bg/lakeside-daytime.jpg"
+image bg school = "images/bg/modern-school.png"
+
+image mage neutral = "images/spr/mage_neutral.png"
+image mage smile = "images/spr/mage_smile.png"
+
+image tee neutral = "images/spr/tee_neutral.png"
+image tee smile = "images/spr/tee_smiling.png"
+
+image aiko smile = "images/spr/aiko_casual_smile.png"
 
 init python:
     AudioLayer.set('drum', audio.drum)
@@ -19,7 +31,11 @@ init python:
 
 label start:
     $AudioLayer.start()
-    scene bg room
+    scene bg lakeside
+    show tee smile at left
+    show aiko smile
+    show mage smile at right
+    "Testing"
     nvl show
 
 label main:
