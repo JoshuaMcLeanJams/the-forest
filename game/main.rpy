@@ -4,10 +4,27 @@ label start:
     show tee neutral at left
     show aiko neutral
     show mage neutral at right
+
     "None of them look familiar..."
-    jump past
-    jump present
-    jump future
+    "Judging by the looks on their faces, you're not familiar to them, either."
+
+    menu:
+        "Talk to the woman in green":
+            hide tee 
+            hide aiko with dissolve
+            show mage neutral at center with move
+            m "Yes?"
+        "Talk to the girl in the tee-shirt":
+            hide mage 
+            hide aiko with dissolve
+            show tee neutral at center with move
+            t "Yes?"
+        "Talk to the girl in the uniform":
+            hide tee 
+            hide mage with dissolve
+            show aiko neutral at center with move
+            a "Yes?"
+
     jump end
 
 label past:
