@@ -14,4 +14,4 @@ image bg modern street = "images/bg/modern-street.png"
 
 # future - Tee's world
 image bg future space = "images/bg/future-space.png"
-image bg future med station = "images/bg/future-med-station.jpg"
+image bg future med bay = "images/bg/future-med-station.jpg"
