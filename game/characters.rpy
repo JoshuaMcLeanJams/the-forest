@@ -1,7 +1,3 @@
-define a = Character("Aiko", color="#C8FFC8")
-image aiko neutral = "images/spr/aiko_casual_frown.png"
-image aiko happy = "images/spr/aiko_casual_smile.png"
-
 define m = Character("Mage", color="#C8FFC8")
 image mage neutral = "images/spr/mage_neutral.png"
 image mage angry = "images/spr/mage_angry2.png"
@@ -18,4 +14,3 @@ image tee angry = "images/spr/tee_angry.png"
 image tee annoyed = "images/spr/tee_annoyed.png"
 image tee happy = "images/spr/tee_smiling.png"
 image tee sad = "images/spr/tee_sad.png"
-
