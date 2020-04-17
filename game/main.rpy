@@ -1,16 +1,21 @@
 label start:
     #$AudioLayer.start()
-    play music longing
+    play music longing fadein 3.0 fadeout 1.0
 
-    scene bg future space
+    scene bg future space with vpunch
+
     show tee neutral at left
-    t "We're gonna be late, get moving!"
+    "Your sister is pushier than usual today."
+    t "Move! We need to get this done."
 
+    $choice1 = True
+label menu1:
     menu:
-        "Late for what?":
+        "Late for what?" if choice1:
+            $choice1 = False
             show tee annoyed at center with move
             t "Ugh, you're hopeless. Come on."
-            "She grabs you by the arm and you have no choice but to follow."
+            jump menu1
         "Okay, let's go!":
             show tee happy at center with move
             t "Thank you."
@@ -20,22 +25,25 @@ label start:
     show tee at right with move
     hide tee with dissolve
 
-    scene bg future med bay
+    scene bg future med bay with hpunch
     show tee neutral at left with dissolve
     t "You first."
     "She motions toward the machine in the center of the room."
 
+    $choice1 = True
+    $choice2 = True
+label menu2:
     menu:
         "She's tapping her foot impatiently."
 
-        "Why am I first?":
+        "Why am I first?" if choice1:
             show tee angry
             t "Because you don't know how to operate it, duh. Now get in."
-
-        "What is this thing?":
+            jump menu2
+        "What is this thing?" if choice1:
             show tee annoyed
-            t "Don't ask stupid questions. Get in."
-
+            t "Don't ask stupid questions. We're running out of time."
+            jump menu2
         "Okay.":
             show tee neutral
             t "All right, lay down and get the straps on."
@@ -74,7 +82,7 @@ label start:
             m "*sigh* Well maybe it was a freak accident."
 
         "Wait, who are you?":
-            m "It's me, you dingbat."
+            m "It's me, you donut."
             "You don't recognize her at all."
             show mage angry
             m "Your sister! Agh, do I have to explain this every time?"
@@ -101,8 +109,8 @@ label fix:
     hide mage with dissolve
 
 label vr:
-    scene bg past day
-    play music forest
+    scene bg past day with fade
+    play music forest fadein 1.0
     "Where am I now?"
     show mage neutral at left
     "There she is again. She looks around."
@@ -110,30 +118,34 @@ label vr:
     t "Oh, that's better."
     show mage neutral
     t "Now gather some twigs. I'll look around for shelter."
+    show mage at right with move
     hide mage dissolve
     "She disappears before you can protest, or even ask any questions."
     "Why are you gathering twigs?"
     "Guess you should do what Boss Sister says... as usual."
+
+label gather_start:
     $twigs = 0
     $turns = 0
 
 label gathering:
-    $import random
     menu:
-        "Gather twigs (have [twigs])":
+        "Gather twigs (you have [twigs])":
             $twigs_found = random.randint(1, 3)
             $twigs += twigs_found
             "You find [twigs_found] twigs and add them to your stockpile."
             $turns += 1
-        "Wait a while":
-            "You lean against a tree and wait for a bit."
+        "Wait a few minutes":
+            "You lean against a tree and wait."
             $turns += 1
+        "Wait for her to return":
+            $turns += 10
     if turns >= 6:
         jump gathering_done
     jump gathering
 
 label gathering_done:
-    show mage neutral
+    show mage neutral at right with dissolve
     t "You done?"
 
     if twigs == 0:
@@ -153,12 +165,14 @@ label gathering_done:
         "Argh! You did an amazing job, and she won't even look at your stack of
         twigs."
 
-    $asked_twigs = False
+    $choice1 = True
+label menu3:
     menu:
-        "Why do we need twigs?" if not asked_twigs:
-            $asked_twigs = True
+        "Why do we need twigs?" if choice1:
+            $choice1 = False
             show mage annoyed
             t "To build a fire, obviously."
+            jump menu3
         "Did you find any shelter?":
             t "Yep, there's a cave not far from here."
 
@@ -167,7 +181,7 @@ label gathering_done:
     "You trek to the cave."
     hide mage with dissolve
 
-    scene bg past night
+    scene bg past night with fade
     show mage neutral with dissolve
     t "Okay, drop the twigs there."
     if twigs > 0:
@@ -179,8 +193,7 @@ label gathering_done:
         t "Wait, where are the twigs?"
         show mage angry
         t "YOU DIDN'T GET ANY?!"
-        "She claps her hands."
-        jump ending_bad
+        jump return_to_forest
     elif twigs < 3:
         t "That's... it?"
         show mage sad
@@ -188,42 +201,50 @@ label gathering_done:
         "She snaps her fingers over the twigs and they ignite, providing light
         and warmth..."
         "...for about ten seconds."
-        show mage angry
-        "She claps her hands without another word."
-        jump ending_bad
+        jump return_to_forest
     elif twigs < 9:
         t "I guess that'll do."
         "She snaps her fingers over the twigs and they ignite."
-        jump ending_neutral
+        jump ending
     else:
         show mage happy
         t "Oh, excellent."
         "She snaps her fingers over the twigs and they ignite."
-        jump ending_good
+        jump ending
 
-label ending_bad:
-    scene bg subway night
-    play music longing
-    "You're back in that strange tube thing, but now it's moving."
-    "Patiently, you wait for your sister to appear."
-    "The minutes pass and... nothing."
-    "You wonder if you'll ever get out."
-    "(Bad ending, 1/3)"
-    jump end
+label return_to_forest:
+    show mage angry
+    "She claps."
+    scene bg past day with fade
+    "You're back out in the forest. Oddly, it's daytime again."
+    show mage angry with dissolve
+    "Now get some damn twigs!"
+    hide mage with dissolve
+    jump gather_start
 
-label ending_neutral:
-    "The warmth is enough to get you through the night. And then the real
-    journey begins..."
-    "(Neutral ending, 2/3)"
-    jump end
+label ending:
+    stop music fadeout 2.0
+    "A strange white light begins piercing through the forest around you."
 
-label ending_good:
-    "The two of you stay up all night seeing amazing visions in the
-    flames. It's almost like watching a vidscreen."
-    "A wonderful bond forms that will last the rest of your lives."
-    "(Good ending, 3/3)"
-    jump end
+    show mage suspicious
+    t "This is it!"
+
+    hide mage with dissolve
+    show tee happy with dissolve
+    t "See, we're losing our avatars."
 
 label end:
+    scene bg future space with fadewhite
+    play music longing fadein 3.0
+    show tee happy with dissolve
+    t "Okay, that's all I needed you for. Get back to your room."
+    show tee at right with move
+    hide tee with dissolve
+    "Before you can protest, she disappears down the hall."
+    "What was that all about?"
+    "You'll find out soon enough..."
+
+label end_end:
     "THE END"
+    jump end_end
     return
